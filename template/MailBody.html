@@ -1,0 +1,23 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <table style="width:100%;">
+        <tr>
+            <th>Handle</th>
+            <th>Submission</th>
+            <th>Problem</th>
+        </tr>
+        {% for item in items %}
+        <TR>
+            <TD class="c1"><a href="{{ item[1] }}"> {{ item[0] }} </a></TD>
+            <TD class="c2"><a href="{{ item[3] }}"> {{ item[2] }} </a></TD>
+            <TD class="c3"><a href="{{ item[5] }}"> {{ item[4] }} </a></TD>
+        </TR>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
