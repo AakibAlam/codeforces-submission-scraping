@@ -29,11 +29,6 @@ This Python script automates the process of fetching Codeforces submissions data
    - Uses Jinja2 templates to format the HTML content of the email body dynamically.
 
 
-## Possible Issues/Concerns
-   - Addresses potential issues with Codeforces' website structure changes.
-   - Uses hardcoded delays (`sleep(1)`), which might not be sufficient in all cases. Consider using `WebDriverWait` for more robust synchronization.
-   - Warns about potential violations of Codeforces' terms of service related to automated web scraping.
-
 ## Improvements
    - Suggests enhancements, including improved error handling, logging, and adherence to best practices.
    - Recommends the use of environment variables for sensitive information and adding comments for better code understanding.
