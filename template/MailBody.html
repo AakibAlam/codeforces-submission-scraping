@@ -1,0 +1,20 @@
+<html>
+  <head> </head>
+
+  <body>
+    <table style="width: 100%">
+      <tr>
+        <th>Handle</th>
+        <th>Submission</th>
+        <th>Problem</th>
+      </tr>
+      {% for item in items %}
+      <tr>
+        <td class="c1"><a href="{{ item[1] }}"> {{ item[0] }} </a></td>
+        <td class="c2"><a href="{{ item[3] }}"> {{ item[2] }} </a></td>
+        <td class="c3"><a href="{{ item[5] }}"> {{ item[4] }} </a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
