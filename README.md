@@ -19,3 +19,6 @@ This Python script automates the process of fetching Codeforces submissions data
 3. **Email Sending:**
 
    - Uses the Sendgrid API to send emails.
+
+## Preview of Email
+<img src="https://github.com/AakibAlam/codeforces-submission-scraping/blob/main/preview.png" align="center" width="100%"/>
