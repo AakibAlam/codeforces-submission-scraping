@@ -83,7 +83,7 @@ def getProblems(handle):
                 temp.append(elem.text)    
             elif cls==2:
                 temp.append(elem.text)
-                if elem.text=='Accepted' and temp[0]==today:
+                if elem.text=='Accepted' and temp[0]==yesterday:
                     problemLink.append(plink)
                     submissionId.append(str(lst2[itr].text))
                     problemId.append(temp[1])
