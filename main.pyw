@@ -1,15 +1,12 @@
 import os
 import jinja2
 import input
-import smtplib
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from datetime import date, timedelta
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 options = webdriver.ChromeOptions()
@@ -25,9 +22,9 @@ today = str(today)
 yesterday = str(yesterday)
 friends = input.friendsList
 
-def getRating():
-    ret  = driver.find_elements(By.XPATH, '//*[@id="pageContent"]/div[2]/div/div[2]/ul/li[1]/span[1]')
-    return int(ret[0].text)
+# def getRating():
+#     ret  = driver.find_elements(By.XPATH, '//*[@id="pageContent"]/div[2]/div/div[2]/ul/li[1]/span[1]')
+#     return int(ret[0].text)
 
 
 def getDate(tame):
@@ -86,7 +83,7 @@ def getProblems(handle):
                 temp.append(elem.text)    
             elif cls==2:
                 temp.append(elem.text)
-                if elem.text=='Accepted' and temp[0]==yesterday:
+                if elem.text=='Accepted' and temp[0]==today:
                     problemLink.append(plink)
                     submissionId.append(str(lst2[itr].text))
                     problemId.append(temp[1])
@@ -115,7 +112,7 @@ for friend in friends:
     profile = "https://codeforces.com/profile/" + friend
     driver.get(profile)
     sleep(1)
-    rating = getRating()
+    # rating = getRating()
 
     submission = driver.find_elements(By.PARTIAL_LINK_TEXT, 'SUBMISSIONS')
     submission[0].click()
@@ -126,32 +123,51 @@ for friend in friends:
 
 
 driver.quit()
- 
-me = input.my_emailId
-pwd = input.password
-you = input.yoursEmail
 
-msg = MIMEMultipart('alternative')
-msg['Subject'] = "Spies Report for " + str(yesterday)
-msg['From'] = me
 
-jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('template'))
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('/home/sultan__/Documents/AAAAAP/Codeforces-Submission-Scraping/codeforces-submission-scraping/template'))
 
 jinja_var = {
     'items': finalList
 }
 
-template = jinja_env.get_template('MailBody.html')
+template_string = '''
+<html>
+    <head></head>
+    <body>
+        <table style="width: 100%; border: 1px solid #dddddd; border-collapse: collapse; border-spacing: 0;">
+            <tr>
+                <th style="border: 1px solid #dddddd; padding: 5px; text-align: center;">Handle</th>
+                <th style="border: 1px solid #dddddd; padding: 5px; text-align: center;">Submission</th>
+                <th style="border: 1px solid #dddddd; padding: 5px; text-align: center;">Problem</th>
+            </tr>
+        {% for item in items %}
+        <tr>
+            <td style="border: 1px solid #dddddd; padding: 5px; text-align: center;" class="c1"><a href="{{ item[1] }}">{{ item[0] }}</a></td>
+            <td style="border: 1px solid #dddddd; padding: 5px; text-align: center;" class="c2"><a href="{{ item[3] }}">{{ item[2] }}</a></td>
+            <td style="border: 1px solid #dddddd; padding: 5px; text-align: center;" class="c3"><a href="{{ item[5] }}">{{ item[4] }}</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+    </body>
+</html>
+'''
+
+template = jinja_env.from_string(template_string)
+
 html = template.render(jinja_var)
-part2 = MIMEText(html, 'html')
-msg.attach(part2)
 
-s = smtplib.SMTP('smtp.gmail.com', 587)
-s.starttls()
+me = input.myEmail
+you = input.yoursEmail
 
-s.login(me, pwd)
 
-msg['To'] = you
-s.sendmail(me, you, msg.as_string())
+message = Mail(
+    from_email = input.myEmail,
+    to_emails = input.yoursEmail,
+    subject = "Spies Report for " + str(yesterday),
+    html_content = html)
 
-s.quit()
+
+sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+
+response = sg.send(message)
