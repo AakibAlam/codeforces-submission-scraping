@@ -22,11 +22,6 @@ today = str(today)
 yesterday = str(yesterday)
 friends = input.friendsList
 
-# def getRating():
-#     ret  = driver.find_elements(By.XPATH, '//*[@id="pageContent"]/div[2]/div/div[2]/ul/li[1]/span[1]')
-#     return int(ret[0].text)
-
-
 def getDate(tame):
     cnv = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
     cnt = 0
@@ -112,7 +107,6 @@ for friend in friends:
     profile = "https://codeforces.com/profile/" + friend
     driver.get(profile)
     sleep(1)
-    # rating = getRating()
 
     submission = driver.find_elements(By.PARTIAL_LINK_TEXT, 'SUBMISSIONS')
     submission[0].click()
